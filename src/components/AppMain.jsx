@@ -8,9 +8,52 @@ export default function () {
   //create a link between input text and state
   function handleTitle(e) {
     if (post.id) {
-      setPost({ title: e.target.value, id: post.id });
+      setPost({
+        title: e.target.value,
+        id: post.id,
+        image: post.image ?? "",
+        content: post.content ?? "",
+      });
     } else {
-      setPost({ title: e.target.value });
+      setPost({
+        title: e.target.value,
+        image: post.image ?? "",
+        content: post.content ?? "",
+      });
+    }
+  }
+  //create a link between input text and state
+  function handleImage(e) {
+    if (post.id) {
+      setPost({
+        id: post.id,
+        image: e.target.value,
+        title: post.title ?? "",
+        content: post.content ?? "",
+      });
+    } else {
+      setPost({
+        image: e.target.value,
+        title: post.title ?? "",
+        content: post.content ?? "",
+      });
+    }
+  }
+  //create a link between input text and state
+  function handleContent(e) {
+    if (post.id) {
+      setPost({
+        content: e.target.value,
+        id: post.id,
+        title: post.title ?? "",
+        image: post.image ?? "",
+      });
+    } else {
+      setPost({
+        content: e.target.value,
+        title: post.title ?? "",
+        image: post.image ?? "",
+      });
     }
   }
   //create a function to change state of poslist
@@ -22,6 +65,8 @@ export default function () {
       newPostList.push({
         id: Date.now(),
         title: post.title,
+        image: post.image,
+        content: post.content,
       });
 
       return newPostList;
@@ -40,7 +85,12 @@ export default function () {
       });
 
       //   console.log(currentpost[0].title);
-      setPost({ title: currentpost[0].title, id: currentpost[0].id });
+      setPost({
+        id: currentpost[0].id,
+        title: currentpost[0].title,
+        image: currentpost[0].image,
+        content: currentpost[0].content,
+      });
 
       return newpostlist;
     });
@@ -77,10 +127,10 @@ export default function () {
     <>
       <div className="form_container w-screen h-screen p-5">
         <form
-          className="p-4 bg-sky-300 rounded-2xl flex flex-col"
+          className="px-4 py-2 bg-sky-300 rounded-2xl flex flex-col"
           onSubmit={editMode === false ? handlePostList : addEditPost}
         >
-          <label htmlFor="title" className="pb-3 font-bold">
+          <label htmlFor="title" className="py-3 font-bold">
             Title
           </label>
           <input
@@ -90,6 +140,30 @@ export default function () {
             value={post.title ?? ""}
             onChange={handleTitle}
             name="title"
+            placeholder="Inserisci il titolo del post"
+          />
+          <label htmlFor="image" className="py-3 font-bold">
+            image
+          </label>
+          <input
+            className="title_input outline-0 rounded-xl px-3"
+            id="image"
+            type="text"
+            value={post.image ?? ""}
+            onChange={handleImage}
+            name="image"
+            placeholder="Inserisci il titolo del post"
+          />
+          <label htmlFor="content" className="py-3 font-bold">
+            Description
+          </label>
+          <input
+            className="title_input outline-0 rounded-xl px-3"
+            id="content"
+            type="text"
+            value={post.content ?? ""}
+            onChange={handleContent}
+            name="content"
             placeholder="Inserisci il titolo del post"
           />
           <button className="px-3 py-2 my-4 bg-sky-800 rounded-3xl text-white font-bold">
@@ -105,7 +179,13 @@ export default function () {
                   key={post.id}
                   className="border-b-2 my-2 py-3 flex justify-between"
                 >
-                  <div className="text-[20px] font-semibold">{post.title}</div>
+                  <div className="Info_container">
+                    <div className="text-[20px] font-semibold">
+                      {post.title}
+                    </div>
+                    <div className="">{post.image}</div>
+                    <div className="text-[14px] ">{post.content}</div>
+                  </div>
                   <div className="btn_section flex items-center">
                     <button
                       onClick={() => handleEditPost(post.id)}
