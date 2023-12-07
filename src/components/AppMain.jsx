@@ -5,6 +5,7 @@ export default function () {
   const [post, setPost] = useState("");
   const [editMode, setEditMode] = useState(false);
 
+  // TODO refactoring handleTitle/handleImage/handleContent
   //create a link between input text and state
   function handleTitle(e) {
     if (post.id) {
