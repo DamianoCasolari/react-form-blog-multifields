@@ -4,22 +4,26 @@ export default function () {
   const [potsList, setPostList] = useState([]);
   const [post, setPost] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [category, setCategory] = useState(false);
+  const [tags, setTags] = useState([]);
 
   // TODO refactoring handleTitle/handleImage/handleContent
   //create a link between input text and state
   function handleTitle(e) {
     if (post.id) {
       setPost({
-        title: e.target.value,
         id: post.id,
+        title: e.target.value,
         image: post.image ?? "",
         content: post.content ?? "",
+        category: post.category,
       });
     } else {
       setPost({
         title: e.target.value,
         image: post.image ?? "",
         content: post.content ?? "",
+        category: post.category,
       });
     }
   }
@@ -31,12 +35,14 @@ export default function () {
         image: e.target.value,
         title: post.title ?? "",
         content: post.content ?? "",
+        category: post.category,
       });
     } else {
       setPost({
         image: e.target.value,
         title: post.title ?? "",
         content: post.content ?? "",
+        category: post.category,
       });
     }
   }
@@ -48,15 +54,51 @@ export default function () {
         id: post.id,
         title: post.title ?? "",
         image: post.image ?? "",
+        category: post.category,
       });
     } else {
       setPost({
         content: e.target.value,
         title: post.title ?? "",
         image: post.image ?? "",
+        category: post.category,
       });
     }
   }
+  //create a link between input select and state
+  function handleCategory(e) {
+    if (post.id) {
+      setPost({
+        ...post,
+        category: e.target.value,
+      });
+      setCategory(e.target.value);
+    } else {
+      setPost({
+        ...post,
+        category: e.target.value,
+      });
+      setCategory(e.target.value);
+    }
+  }
+  //create a link between input checkbox and state
+  function handleTags(e) {
+    // const currentTags = [...tags];
+    // if (currentTags.includes(e.target.value)) {
+    //   if (post.id) {
+    //     setPost({
+    //       ...post,
+    //       tags: e.target.value,
+    //     });
+    //   } else {
+    //     setPost({
+    //       ...post,
+    //       tags: e.target.value,
+    //     });
+    //   }
+    // }
+  }
+
   //create a function to change state of poslist
   function handlePostList(e) {
     e.preventDefault();
@@ -68,12 +110,14 @@ export default function () {
         title: post.title,
         image: post.image,
         content: post.content,
+        category: post.category,
       });
 
       return newPostList;
     });
 
     setPost("");
+    setCategory("");
   }
   //create a function to menage edit post
   function handleEditPost(id) {
@@ -91,7 +135,10 @@ export default function () {
         title: currentpost[0].title,
         image: currentpost[0].image,
         content: currentpost[0].content,
+        category: currentpost[0].category,
       });
+
+      setCategory(() => currentpost[0].category);
 
       return newpostlist;
     });
@@ -107,6 +154,7 @@ export default function () {
           item.id == post.id ? post : item
         );
         setPost("");
+        setCategory("");
         setEditMode(false);
         console.log(newPostList);
         return newPostList;
@@ -167,6 +215,87 @@ export default function () {
             name="content"
             placeholder="Inserisci il titolo del post"
           />
+          <label htmlFor="category" className="py-3 font-bold">
+            Category
+          </label>
+          <select
+            name="category"
+            id="category"
+            value={category}
+            className="rounded-xl p-2"
+            onChange={handleCategory}
+          >
+            <option value="0">Select category</option>
+            <option value="1">Front-end</option>
+            <option value="2">Back-end</option>
+            <option value="3">Full-stack</option>
+            <option value="4">App Smartphone</option>
+          </select>
+          <section className="tags_section flex flex-wrap justify-around mt-2 ">
+            <section className="tags_container flex items-center mt-1 me-3">
+              <label htmlFor="html" className="py-3 font-bold TEXT-[20px]">
+                HTML
+              </label>
+              <input
+                id="html"
+                type="checkbox"
+                value={0}
+                onChange={handleTags}
+                className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+              />
+            </section>
+            <div className="tags_container flex items-center mt-1 me-3">
+              <label htmlFor="css" className="py-3 font-bold TEXT-[20px]">
+                CSS
+              </label>
+              <input
+                id="css"
+                type="checkbox"
+                value={1}
+                onChange={handleTags}
+                className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+              />
+            </div>
+            <div className="tags_container flex items-center mt-1 me-3">
+              <label
+                htmlFor="javascript"
+                className="py-3 font-bold TEXT-[20px]"
+              >
+                JAVASCRIPT
+              </label>
+              <input
+                id="javascript"
+                type="checkbox"
+                value={2}
+                onChange={handleTags}
+                className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+              />
+            </div>
+            <div className="tags_container flex items-center mt-1 me-3">
+              <label htmlFor="php" className="py-3 font-bold TEXT-[20px]">
+                PHP
+              </label>
+              <input
+                id="php"
+                type="checkbox"
+                value={3}
+                onChange={handleTags}
+                className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+              />
+            </div>
+            <div className="tags_container flex items-center mt-1 me-3">
+              <label htmlFor="laravel" className="py-3 font-bold TEXT-[20px]">
+                LARAVEL
+              </label>
+              <input
+                id="laravel"
+                type="checkbox"
+                value={4}
+                onChange={handleTags}
+                className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+              />
+            </div>
+          </section>
           <button className="px-3 py-2 my-4 bg-sky-800 rounded-3xl text-white font-bold">
             {editMode === false ? "Add post" : "Edit post"}
           </button>
