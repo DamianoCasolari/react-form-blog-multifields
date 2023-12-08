@@ -150,7 +150,6 @@ export default function () {
         setCategory("");
         setTags([]);
         setEditMode(false);
-        console.log(newPostList);
         return newPostList;
       }
       return oldPostList;
@@ -164,6 +163,10 @@ export default function () {
 
       return newPostList.filter((post) => id != post.id);
     });
+    setPost("");
+    setCategory("");
+    setTags([]);
+    setEditMode(false);
   }
 
   return (
