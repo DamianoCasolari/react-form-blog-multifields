@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function () {
   const [potsList, setPostList] = useState([]);
@@ -6,24 +6,20 @@ export default function () {
   const [editMode, setEditMode] = useState(false);
   const [category, setCategory] = useState(false);
   const [tags, setTags] = useState([]);
+  // const [isChecked, setIsChecked] = useState(false);
 
   // TODO refactoring handleTitle/handleImage/handleContent
   //create a link between input text and state
   function handleTitle(e) {
     if (post.id) {
       setPost({
-        id: post.id,
+        ...post,
         title: e.target.value,
-        image: post.image ?? "",
-        content: post.content ?? "",
-        category: post.category,
       });
     } else {
       setPost({
+        ...post,
         title: e.target.value,
-        image: post.image ?? "",
-        content: post.content ?? "",
-        category: post.category,
       });
     }
   }
@@ -31,18 +27,13 @@ export default function () {
   function handleImage(e) {
     if (post.id) {
       setPost({
-        id: post.id,
+        ...post,
         image: e.target.value,
-        title: post.title ?? "",
-        content: post.content ?? "",
-        category: post.category,
       });
     } else {
       setPost({
+        ...post,
         image: e.target.value,
-        title: post.title ?? "",
-        content: post.content ?? "",
-        category: post.category,
       });
     }
   }
@@ -50,18 +41,13 @@ export default function () {
   function handleContent(e) {
     if (post.id) {
       setPost({
+        ...post,
         content: e.target.value,
-        id: post.id,
-        title: post.title ?? "",
-        image: post.image ?? "",
-        category: post.category,
       });
     } else {
       setPost({
+        ...post,
         content: e.target.value,
-        title: post.title ?? "",
-        image: post.image ?? "",
-        category: post.category,
       });
     }
   }
@@ -83,20 +69,23 @@ export default function () {
   }
   //create a link between input checkbox and state
   function handleTags(e) {
-    // const currentTags = [...tags];
-    // if (currentTags.includes(e.target.value)) {
-    //   if (post.id) {
-    //     setPost({
-    //       ...post,
-    //       tags: e.target.value,
-    //     });
-    //   } else {
-    //     setPost({
-    //       ...post,
-    //       tags: e.target.value,
-    //     });
-    //   }
-    // }
+    if (e.target.checked) {
+      setPost({ ...post, tags: [...tags, e.target.value] });
+
+      setTags(() => [...tags, e.target.value]);
+    } else {
+      const currentTagsList = [...tags];
+      const newTagsList = currentTagsList.filter(
+        (tag) => e.target.value != tag
+      );
+      setPost({
+        ...post,
+        tags: newTagsList,
+      });
+      setTags(newTagsList);
+    }
+    console.log(post);
+    console.log(tags);
   }
 
   //create a function to change state of poslist
@@ -107,10 +96,11 @@ export default function () {
 
       newPostList.push({
         id: Date.now(),
-        title: post.title,
-        image: post.image,
-        content: post.content,
-        category: post.category,
+        title: post.title || "",
+        image: post.image || "",
+        content: post.content || "",
+        category: post.category || "",
+        tags: post.tags || [],
       });
 
       return newPostList;
@@ -118,6 +108,7 @@ export default function () {
 
     setPost("");
     setCategory("");
+    setTags([]);
   }
   //create a function to menage edit post
   function handleEditPost(id) {
@@ -132,13 +123,15 @@ export default function () {
       //   console.log(currentpost[0].title);
       setPost({
         id: currentpost[0].id,
-        title: currentpost[0].title,
-        image: currentpost[0].image,
-        content: currentpost[0].content,
-        category: currentpost[0].category,
+        title: currentpost[0].title || "",
+        image: currentpost[0].image || "",
+        content: currentpost[0].content || "",
+        category: currentpost[0].category || "",
+        tags: currentpost[0].tags || [],
       });
 
       setCategory(() => currentpost[0].category);
+      setTags(() => currentpost[0].tags);
 
       return newpostlist;
     });
@@ -155,6 +148,7 @@ export default function () {
         );
         setPost("");
         setCategory("");
+        setTags([]);
         setEditMode(false);
         console.log(newPostList);
         return newPostList;
@@ -240,6 +234,7 @@ export default function () {
                 id="html"
                 type="checkbox"
                 value={0}
+                checked={tags?.includes("0")}
                 onChange={handleTags}
                 className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
               />
@@ -252,6 +247,7 @@ export default function () {
                 id="css"
                 type="checkbox"
                 value={1}
+                checked={tags?.includes("1")}
                 onChange={handleTags}
                 className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
               />
@@ -267,6 +263,7 @@ export default function () {
                 id="javascript"
                 type="checkbox"
                 value={2}
+                checked={tags?.includes("2")}
                 onChange={handleTags}
                 className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
               />
@@ -279,6 +276,7 @@ export default function () {
                 id="php"
                 type="checkbox"
                 value={3}
+                checked={tags?.includes("3")}
                 onChange={handleTags}
                 className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
               />
@@ -291,6 +289,7 @@ export default function () {
                 id="laravel"
                 type="checkbox"
                 value={4}
+                checked={tags?.includes("4")}
                 onChange={handleTags}
                 className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
               />
