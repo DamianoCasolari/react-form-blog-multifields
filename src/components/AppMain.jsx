@@ -96,7 +96,7 @@ export default function () {
   useEffect(() => {
     setPost({ ...post, published: isPublished });
     if (isPublished) {
-      alert("Il tuo articolo sarà visibile a tutti");
+      alert("Il tuo articolo è visibile a tutti gli utenti");
     }
   }, [isPublished]);
 
