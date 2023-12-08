@@ -6,6 +6,7 @@ export default function () {
   const [editMode, setEditMode] = useState(false);
   const [category, setCategory] = useState(false);
   const [tags, setTags] = useState([]);
+  const [isPublished, setIsPublished] = useState(false);
   // const [isChecked, setIsChecked] = useState(false);
 
   // TODO refactoring handleTitle/handleImage/handleContent
@@ -84,9 +85,20 @@ export default function () {
       });
       setTags(newTagsList);
     }
-    console.log(post);
-    console.log(tags);
+    // console.log(post);
+    // console.log(tags);
   }
+
+  function handlePublished(e) {
+    setIsPublished(() => !isPublished);
+  }
+
+  useEffect(() => {
+    setPost({ ...post, published: isPublished });
+    if (isPublished) {
+      alert("Il tuo articolo sarà visibile a tutti");
+    }
+  }, [isPublished]);
 
   //create a function to change state of poslist
   function handlePostList(e) {
@@ -101,6 +113,7 @@ export default function () {
         content: post.content || "",
         category: post.category || "",
         tags: post.tags || [],
+        published: isPublished,
       });
 
       return newPostList;
@@ -108,6 +121,7 @@ export default function () {
 
     setPost("");
     setCategory("");
+    setIsPublished(false);
     setTags([]);
   }
   //create a function to menage edit post
@@ -120,7 +134,10 @@ export default function () {
         return post.id == id;
       });
 
-      //   console.log(currentpost[0].title);
+      setIsPublished(currentpost[0].published);
+      setCategory(() => currentpost[0].category);
+      setTags(() => currentpost[0].tags);
+
       setPost({
         id: currentpost[0].id,
         title: currentpost[0].title || "",
@@ -128,10 +145,8 @@ export default function () {
         content: currentpost[0].content || "",
         category: currentpost[0].category || "",
         tags: currentpost[0].tags || [],
+        published: currentpost[0].published,
       });
-
-      setCategory(() => currentpost[0].category);
-      setTags(() => currentpost[0].tags);
 
       return newpostlist;
     });
@@ -148,6 +163,7 @@ export default function () {
         );
         setPost("");
         setCategory("");
+        setIsPublished(false);
         setTags([]);
         setEditMode(false);
         return newPostList;
@@ -166,6 +182,7 @@ export default function () {
     setPost("");
     setCategory("");
     setTags([]);
+    setIsPublished(false);
     setEditMode(false);
   }
 
@@ -298,6 +315,19 @@ export default function () {
               />
             </div>
           </section>
+          <div className="published_container flex items-center justify-center border-[2px] my-3">
+            <label htmlFor="published" className="py-3 font-bold TEXT-[20px]">
+              Pubblished
+            </label>
+            <input
+              id="published"
+              type="checkbox"
+              value={isPublished}
+              checked={isPublished}
+              onChange={handlePublished}
+              className="appearance-none border border-gray-300 rounded-md checked:bg-sky-800  checked:border-transparent focus:outline-none focus:ring focus:border-blue-300 mx-2 w-5 h-5"
+            />
+          </div>
           <button className="px-3 py-2 my-4 bg-sky-800 rounded-3xl text-white font-bold">
             {editMode === false ? "Add post" : "Edit post"}
           </button>
