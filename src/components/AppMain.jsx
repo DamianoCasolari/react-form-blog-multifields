@@ -111,7 +111,7 @@ export default function () {
         title: post.title || "",
         image: post.image || "",
         content: post.content || "",
-        category: post.category || "",
+        categoryId: post.category || "",
         tags: post.tags || [],
         published: isPublished,
       });
